@@ -1,0 +1,27 @@
+<html>
+    <head>
+	<style>
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+        <title>{{ title }} Project Nirvana</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <h1>Project Nirvana : Summarize with ease</h1>
+        <form method="POST">
+            <textarea name="text1" placeholder="Say Something: ...." rows="10" cols="109"></textarea><br><br>
+            <input class="example_a" type="submit">
+        </form>
+        {% if text1 %}
+        <div>
+            <h2>Generated Summary</h2> '{{ text1 }}' <h2></h2>
+
+            {% else %}
+            <p></p>
+            {% endif %}
+        </div>
+    </body>
+</html>
+
