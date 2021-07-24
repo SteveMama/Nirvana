@@ -11,16 +11,24 @@ table, th, td {
     <body>
         <h1>Project Nirvana : Summarize with ease</h1>
         <form method="POST">
-            <textarea name="text1" placeholder="Say Something: ...." rows="10" cols="109"></textarea><br><br>
+            <textarea name="text1" minlength="15000" maxlength="28000"  placeholder="Say Something: ...." rows="10" cols="55"></textarea>
+            <textarea name ="text2" minlength="15000" maxlength="28000"  placeholder="Say Something" rows="10" cols="55"></textarea><br><br>
+            <textarea name ="text3" minlength="15000" maxlength="28000" placeholder="Say Something" rows="10" cols="55"></textarea><br><br>
+
             <input class="example_a" type="submit">
+
         </form>
         {% if text1 %}
+         {%  if text2 %}
+             {%  if text3 %}
         <div>
-            <h2>Generated Summary</h2> '{{ text1 }}' <h2></h2>
+            <h2>Generated Summary</h2> '{{ text1 }}' <h2>'{{ text2 }}'</h2><h2>'{{ text3 }}'</h2>
 
             {% else %}
             <p></p>
             {% endif %}
+                {%  endif %}
+                    {%  endif %}
         </div>
     </body>
 </html>
