@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template
+from flask_ngrok import run_with_ngrok
 from splitter import splitter
 import pandas as pd
 from transformers import PegasusTokenizer, PegasusForConditionalGeneration
@@ -36,6 +37,8 @@ quantized_model.load_state_dict(quantized_state_dict)
 
 
 app = Flask(__name__)
+run_with_ngrok(app)
+
 
 
 
@@ -48,22 +51,39 @@ def my_form_post():
 
     #convert to lowercase
     text1 = request.form['text1']
-
-    new_transcript = text1.replace("\n", " ")
-
-    print(new_transcript)
-
-    batch = tok.prepare_seq2seq_batch(src_texts=[new_transcript], truncation=True, padding='longest', return_tensors='pt')
-    gen = quantized_model.generate(**batch)
-    summary: List[str] = tok.batch_decode(gen,skip_special_tokens=True)
-    new_summary = re.sub(r'[^\x00-\x7f]+', ' ', str(summary))
-
-    print(new_summary)
-    text_final = ''.join(c for c in text1 if not c.isdigit())
-    
+    text2 = request.form['text2']
+    text3 = request.form['text2']
+    print(text1,text2,text3)
+    new_transcript1 = text1.replace("\n", " ")
+    new_transcript2 = text2.replace("\n"," ")
+    new_transcript3 = text3.replace("\n"," ")
 
 
-    return render_template('form.html',text1=new_summary)
+    print(new_transcript1)
+    print(new_transcript2)
+    print(new_transcript3)
 
+    batch1 = tok.prepare_seq2seq_batch(src_texts=[new_transcript1], truncation=True, padding='longest', return_tensors='pt')
+    batch2 = tok.prepare_seq2seq_batch(src_texts=[new_transcript2], truncation=True, padding='longest', return_tensors='pt')
+    batch3 = tok.prepare_seq2seq_batch(src_texts=[new_transcript2], truncation=True, padding='longest', return_tensors='pt')
+    gen1 = quantized_model.generate(**batch1)
+    gen2 = quantized_model.generate(**batch2)
+    gen3 = quantized_model.generate(**batch3)
+
+    summary1: List[str] = tok.batch_decode(gen1,skip_special_tokens=True)
+    summary2: List[str] = tok.batch_decode(gen2, skip_special_tokens=True)
+    summary3: List[str] = tok.batch_decode(gen3, skip_special_tokens=True)
+
+    new_summary1 = re.sub(r'[^\x00-\x7f]+', ' ', str(summary1))
+    new_summary2 = re.sub(r'[^\x00-\x7f]+', ' ', str(summary2))
+    new_summary3 = re.sub(r'[^\x00-\x7f]+', ' ', str(summary3))
+
+
+
+    print(new_summary1)
+    print(new_summary2)
+    print(new_summary3)
+
+    return render_template('form.html',text1=new_summary1, text2=new_summary2, text3=new_summary3)
 if __name__ == "__main__":
-    app.run(debug=True, host="127.0.0.1", port=5002, threaded=True)
+    app.run()
